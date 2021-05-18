@@ -239,6 +239,17 @@ class Base_Model(nn.Module):
                     print(("dis %d:  " + extract_subject(database_text[result_idx]) + " (" + category[database_labels[result_idx][0]] + ")" + " index: " + str(result_idx) ) % (dis), file=open(1, 'w', encoding='utf-8', closefd=False))
             print("\n")
 
+    def word_embedding_case_study(self):
+        self.eval()
+        E = deepcopy(self.dec.E.weight.data.T)
+        cosine_dis = cosine_distance_torch(E)
+        _, indices = cosine_dis.topk(6, dim=1, largest=False)
+
+        tokens = np.array(self.data.tokens)
+        for item in ['weapons', 'medical', 'companies', 'define', 'israel', 'book']:
+            idx = np.where(tokens == item)[0]
+            print(tokens[np.array(indices[idx].tolist())][0])
+
     def hash_codes_visulization(self):
         self.eval()
         device = torch.device('cuda' if self.hparams.cuda else 'cpu')
