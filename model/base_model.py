@@ -15,7 +15,6 @@ from timeit import default_timer as timer
 
 from utils.logger import Logger
 from utils.data import LabeledDocuments
-from utils.ng20_helper import extract_subject
 from utils.evaluation import compute_retrieval_precision, compute_retrieval_precision_median_threshold, compute_hamming_distance, cosine_distance_torch
 
 class Base_Model(nn.Module):
@@ -199,56 +198,6 @@ class Base_Model(nn.Module):
         val_perf = self.evaluate(database_loader, val_loader, device, is_val=True)
         test_perf = self.evaluate(database_loader, test_loader, device, is_val=False)
         return val_perf, test_perf
-
-    def retrival_case_study(self):
-        self.eval()
-        device = torch.device('cuda' if self.hparams.cuda else 'cpu')
-        _, database_loader, _, test_loader = self.data.get_loaders(
-            self.hparams.num_trees, self.hparams.alpha, self.hparams.batch_size, self.hparams.num_workers,
-            shuffle_train=False, get_test=True)
-        
-        def extract_data(loader):
-            encoding_chunks = []
-            label_chunks = []
-            for (docs, labels) in loader:
-                docs = docs.to(device)
-                encoding_chunks.append(docs if self.encode_discrete is None else
-                                    self.encode_discrete(docs))
-                label_chunks.append(labels)
-            encoding_mat = torch.cat(encoding_chunks, 0)
-            label_mat = torch.cat(label_chunks, 0)
-            label_lists = [[j.item() for j in label_mat[i].nonzero()] for i in
-                        range(label_mat.size(0))]
-            return encoding_mat, label_lists
-            
-        category, tokens = self.data.category, self.data.tokens
-        (database_codes, database_labels), database_text = extract_data(database_loader), self.data.text_train
-        (test_codes, test_labels), test_text = extract_data(test_loader), self.data.text_test
-
-        idxs = [268, 281, 346, 379, 447, 493, 571, 652, 687, 1005, 1009, 1030, 1216, 1258, 1657, 1658, 2015, 2074, 2106, 2282, 2343, 2462, 2595, 2698, 2760, 2771, 2858, 2921, 3097, 3254, 3331, 3459, 3464, 3484, 3502, 3694]
-        distance = compute_hamming_distance(test_codes, database_codes)
-
-        for i in range(len(idxs)):
-            query_idx = idxs[i]
-            print("Query:  " + extract_subject(test_text[query_idx]) + " (" + category[test_labels[query_idx][0]] + ")" + " index: " + str(query_idx), file=open(1, 'w', encoding='utf-8', closefd=False))
-
-            for dis in [1, 5, 10, 20, 50, 70, 90, 100]:
-                result_idx = (distance[query_idx] == dis).nonzero()
-                if result_idx.size(0) > 0:
-                    result_idx = result_idx[0, 0].item()
-                    print(("dis %d:  " + extract_subject(database_text[result_idx]) + " (" + category[database_labels[result_idx][0]] + ")" + " index: " + str(result_idx) ) % (dis), file=open(1, 'w', encoding='utf-8', closefd=False))
-            print("\n")
-
-    def word_embedding_case_study(self):
-        self.eval()
-        E = deepcopy(self.dec.E.weight.data.T)
-        cosine_dis = cosine_distance_torch(E)
-        _, indices = cosine_dis.topk(6, dim=1, largest=False)
-
-        tokens = np.array(self.data.tokens)
-        for item in ['weapons', 'medical', 'companies', 'define', 'israel', 'book']:
-            idx = np.where(tokens == item)[0]
-            print(tokens[np.array(indices[idx].tolist())][0])
 
     def hash_codes_visulization(self):
         self.eval()
