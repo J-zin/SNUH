@@ -14,7 +14,7 @@ Unsupervised document hashing on 20Newsgroups using 64 bits
 python main.py ng64 data/ng20.tfidf.mat --train --cuda
 ```
 
-To reproduce the results reported in the paper, please refer to the `run.sh` for detailed running comments.
+To reproduce the results reported in the paper, please refer to the `run.sh` for detailed running commands.
 
 ## Acknowledgement
 
