@@ -25,7 +25,7 @@ The coding logic follows the project organization in [AMMI](https://github.com/k
 This code is offered under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## References
-
+[1] [Integrating Semantics and Neighborhood Information with Graph-Driven Generative Models for Document Retrieval](https://arxiv.org/pdf/2105.13066.pdf)
 ```
 @article{zijing2021snuh,
   author    = {Zijing Ou and
@@ -40,6 +40,5 @@ This code is offered under the [MIT License](https://opensource.org/licenses/MIT
                Generative Models for Document Retrieval},
   journal   = {arXiv preprint arXiv:2105.13066},
   year      = {2021},
-  url       = {https://arxiv.org/abs/2105.13066},
 }
 ```
