@@ -23,3 +23,23 @@ The coding logic follows the project organization in [AMMI](https://github.com/k
 ## License
 
 This code is offered under the [MIT License](https://opensource.org/licenses/MIT).
+
+## References
+
+```
+@article{zijing2021snuh,
+  author    = {Zijing Ou and
+               Qinliang Su and
+               Jianxing Yu and
+               Bang Liu and
+               Jingwen Wang and
+               Ruihui Zhao and
+               Changyou Chen and
+               Yefeng Zheng},
+  title     = {Integrating Semantics and Neighborhood Information with Graph-Driven
+               Generative Models for Document Retrieval},
+  journal   = {arXiv preprint arXiv:2105.13066},
+  year      = {2021},
+  url       = {https://arxiv.org/abs/2105.13066},
+}
+```
