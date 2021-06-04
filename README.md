@@ -1,6 +1,7 @@
 # SNUH
 
 The PyTorch implementation of "Integrating Semantics and Neighborhood Information with Graph-Driven Generative Models for Document Retrieval" (ACL 2021).
+
 The MindSpore implementation is available in [this repo](https://github.com/J-zin/SNUH-mindspore).
 
 ## Datasets
